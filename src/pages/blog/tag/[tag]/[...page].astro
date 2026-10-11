@@ -9,8 +9,10 @@ export async function getStaticPaths({ paginate }) {
   const all_tags = all_posts.flatMap((post) => {
     return post.data.tags || [];
   });
+  const tag_set = new Set(all_tags);
+  const unique_tags = [...tag_set];
 
-  return all_tags.flatMap((tag) => {
+  return unique_tags.flatMap((tag) => {
     const filtred_posts = all_posts.filter((post) => {
       return post.data.tags?.includes(tag);
     });
@@ -43,7 +45,7 @@ const params = Astro.params;
               title={post.data.title}
               img={post.data.heroImage}
               desc={post.data.description}
-              url={"/blog/" + createSlug(post.data.title, post.slug)}
+              url={"/blog/" + createSlug(post.data.title, post.id)}
               target="_self"
               badge={post.data.badge}
               tags={post.data.tags}
